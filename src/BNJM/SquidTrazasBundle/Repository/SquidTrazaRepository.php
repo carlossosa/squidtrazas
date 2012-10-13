@@ -34,27 +34,23 @@ class SquidTrazaRepository extends EntityRepository {
     }
     
     public function getResultOfPage ($page, $num_per_page = 100, \Doctrine\ORM\QueryBuilder $query) 
-    {
-        //calculo simple de la cantidad paginas
-        $_total = $this->numRecords(clone $query);
-        $total_registros = $_total['num'];
-        $paginas = intval($total_registros / $num_per_page);
-        $page_start_records = ( $page <= $paginas && $page > 0 ) ? intval(($page-1)*$num_per_page) : 0;
+    {       
+        $page_start_records = ( $page > 0 ) ? intval(($page-1)*$num_per_page) : 0;
         
         //total size
         $_size = $this->sumSizeRecords(clone $query);
         $size = $_size['totalsize'];
         
-        return array( 'trazas' => $this->getResults( $page_start_records, $num_per_page, $query), 
-                                                     'page' => array('first' => 1,
-                                                                      'last' => $paginas,
-                                                                      'next' => ( $page < $paginas && $page > 0 ) ? $page+1 : $paginas,
-                                                                      'prev' => ( $page > 1 && $page <= $paginas) ? $page-1 : 1,
-                                                                      'page' => $page,
-                                                                      'num'  => $num_per_page
-                                                                                    ), 
-                                                     'records' => $_total,
-                                                     'total_size' => $size);
+        $r = $this->getResults( $page_start_records, $num_per_page, $query);
+        
+        return array(   'trazas' => $r, 
+                        'page' => array('first' => 1,
+                                         'next' => ( count($r) == $num_per_page && $page > 0 ) ? $page+1 : null,
+                                         'prev' => ( $page > 1 ) ? $page-1 : 1,
+                                         'page' => $page,
+                                         'num'  => $num_per_page
+                                                       ), 
+                        'total_size' => $size);
     }
     
     public function getResults($start = 0, $limit = 100, \Doctrine\ORM\QueryBuilder $query) {

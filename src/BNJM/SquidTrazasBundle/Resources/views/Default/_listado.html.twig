@@ -1,5 +1,5 @@
 <div id="box">
-    <h3>Trazas [Mostrando {{ trazas.page.num }} de {{ trazas.records.num }} peticiones y un total de {{ trazas.total_size | humanreadable }}.]</h3>
+    <h3>Trazas de Navegación con trafico total de {{ trazas.total_size | humanreadable }}.]</h3>
     <table width="100%">
         <thead>
             <tr>
@@ -25,9 +25,14 @@
         </tbody>
 </table>
 <div id="pager">P&aacute;gina 
+    {% if trazas.page.page > 1 %}
     <a id="prevpage" style="cursor: pointer"><img src="{{ asset("bundles/squidtrazas/img/icons/arrow_left.gif") }}" width="16" height="16" /></a>
+    {% endif %}
     <input size="5" value="{{ trazas.page.page }}" type="text" name="page" id="page"/>
-    <a id="nextpage" style="cursor: pointer"><img src="{{ asset("bundles/squidtrazas/img/icons/arrow_right.gif") }}" width="16" height="16" /></a> de {{ trazas.page.last }} | Mostrar 
+    {% if trazas.page.next != null %}
+    <a id="nextpage" style="cursor: pointer"><img src="{{ asset("bundles/squidtrazas/img/icons/arrow_right.gif") }}" width="16" height="16" /></a> 
+    {% endif %}
+    | Mostrar 
     <select id="pager_pages" name="view">
     <option {% if trazas.page.num == 10 %}selected="selected"{% endif %} >10</option>
     <option {% if trazas.page.num == 20 %}selected="selected"{% endif %} >20</option>
