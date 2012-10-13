@@ -1,0 +1,38 @@
+<div id="box">
+    <h3>Trazas [Mostrando {{ trazas.page.num }} de {{ trazas.records.num }} peticiones y un total de {{ trazas.total_size | humanreadable }}.]</h3>
+    <table width="100%">
+        <thead>
+            <tr>
+                <th>Fecha</th>
+                <th>Usuario</th>
+                <th>IP</th>
+                <th>URL</th>                
+                <th>Tama&ntilde;o</th>                
+                <th>Tiempo</th>                
+            </tr>
+        </thead>
+        <tbody>          
+            {% for traza in trazas.trazas %}
+                <tr>
+                    <td>{{ traza.time | date() }}</td>
+                    <td><a href="{{ url("TrazasListadoPorUsuarios", { "username" : traza.usuario }) }}">{{ traza.usuario }}</a></td>
+                    <td><a href="{{ url("TrazasListadoPorIP", { "ip" : traza.ip.ip }) }}">{{ traza.ip }}</a></td></td>
+                    <td><a href="{{ traza.url }}">{{ traza.url | truncate(50,true) }}</a></td>
+                    <td>{{ traza.size | humanreadable }}</td>
+                    <td>{{ traza.transferTime | humantime }}</td>
+                </tr>                
+             {% endfor %}
+        </tbody>
+</table>
+<div id="pager">P&aacute;gina 
+    <a id="prevpage" style="cursor: pointer"><img src="{{ asset("bundles/squidtrazas/img/icons/arrow_left.gif") }}" width="16" height="16" /></a>
+    <input size="5" value="{{ trazas.page.page }}" type="text" name="page" id="page"/>
+    <a id="nextpage" style="cursor: pointer"><img src="{{ asset("bundles/squidtrazas/img/icons/arrow_right.gif") }}" width="16" height="16" /></a> de {{ trazas.page.last }} | Mostrar 
+    <select id="pager_pages" name="view">
+    <option {% if trazas.page.num == 10 %}selected="selected"{% endif %} >10</option>
+    <option {% if trazas.page.num == 20 %}selected="selected"{% endif %} >20</option>
+    <option {% if trazas.page.num == 50 %}selected="selected"{% endif %} >50</option>
+    <option {% if trazas.page.num == 100 %}selected="selected"{% endif %} >100</option>
+    </select> por p&aacute;gina 
+</div>
+                </div>

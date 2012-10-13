@@ -1,0 +1,74 @@
+{% extends app.request.isXmlHttpRequest == false ? "SquidTrazasBundle:Estadisticas:layout.html.twig" : "SquidTrazasBundle::clean.html.twig" %}
+{% block content %}
+      <div id="box">
+    <h3>Usuarios más activos</h3>
+    <table width="100%">
+        <thead>
+            <tr>
+                <th>Usuario</th>
+                <th>Cantidad de Peticiones</th>                              
+                <th>Ancho de banda</th>
+                <th>Tiempo total</th>
+                <th>Velocidad promedio</th>
+            </tr>
+        </thead>
+        <tbody>          
+            {% for usuario in activos %}
+                <tr>
+                    <td>{{ usuario.nombre }}</td>
+                    <td>{{ usuario.accesos }}</td>
+                    <td>{{ usuario.bw | humanreadable }}</td>
+                    <td>{{ usuario.tiempo | humantime }}</a></td>    
+                    <td>{{ ((usuario.bw / usuario.tiempo) * 1024) | humanreadable  }}/s</td>
+                </tr>                
+             {% endfor %}
+        </tbody>
+</table>           
+    <h3>Usuarios mayor trafico</h3>
+    <table width="100%">
+        <thead>
+            <tr>
+                <th>Usuario</th>
+                <th>Cantidad de Peticiones</th>                              
+                <th>Ancho de banda</th>
+                <th>Tiempo total</th>
+                <th>Velocidad promedio</th>
+            </tr>
+        </thead>
+        <tbody>          
+            {% for usuario in trafico %}
+                <tr>
+                    <td>{{ usuario.nombre }}</td>
+                    <td>{{ usuario.accesos }}</td>
+                    <td>{{ usuario.bw | humanreadable }}</td>
+                    <td>{{ usuario.tiempo | humantime }}</a></td>
+                    <td>{{ ((usuario.bw / usuario.tiempo) * 1024) | humanreadable  }}/s</td>
+                </tr>                
+             {% endfor %}
+        </tbody>
+</table>
+    <h3>Usuarios que pasan más tiempo navegando</h3>
+    <table width="100%">
+        <thead>
+            <tr>
+                <th>Usuario</th>
+                <th>Cantidad de Peticiones</th>                              
+                <th>Ancho de banda</th>
+                <th>Tiempo total</th>
+                <th>Velocidad promedio</th>
+            </tr>
+        </thead>
+        <tbody>          
+            {% for usuario in tiempo %}
+                <tr>
+                    <td>{{ usuario.nombre }}</td>
+                    <td>{{ usuario.accesos }}</td>
+                    <td>{{ usuario.bw | humanreadable }}</td>
+                    <td>{{ usuario.tiempo | humantime }}</a></td>  
+                    <td>{{ ((usuario.bw / usuario.tiempo) * 1024) | humanreadable  }}/s</td>
+                </tr>                
+             {% endfor %}
+        </tbody>
+</table>
+    </div>
+{% endblock %}     

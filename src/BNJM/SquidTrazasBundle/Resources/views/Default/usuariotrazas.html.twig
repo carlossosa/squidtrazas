@@ -1,0 +1,35 @@
+{% extends app.request.isXmlHttpRequest == false ? "SquidTrazasBundle::layout.html.twig" : "SquidTrazasBundle::clean.html.twig" %}
+{% block content %}
+{% include "SquidTrazasBundle:Default:_listado.html.twig" %}
+<script>
+        $('#pager_pages').change(function(){ setPorPagina(this); });
+        
+        function setPorPagina ( l)
+        {
+            $.get( '{{ url("TrazasListadoPorUsuarios", { "page" : trazas.page.page, "username" : app.request.get('username') } ) }}', { show : $(l).val() }, function(h){
+                        $('#content').html(h);
+                    }, 'html');//FIN $.post
+        }
+                
+        $('#page').change(function ()
+        {
+            $.get( '{{ url("TrazasListadoPorUsuarios", { "username" : app.request.get('username') } ) }}/'+$(this).val(), { show : $(l).val() }, function(h){
+                        $('#content').html(h);
+                    }, 'html');//FIN $.post
+        });    
+
+        $('#nextpage').click(function ()
+        {
+            $.get( '{{ url("TrazasListadoPorUsuarios", { "page" : trazas.page.next, "username" : app.request.get('username') } ) }}', { show : {{ trazas.page.num }} }, function(h){
+                        $('#content').html(h);
+                    }, 'html');//FIN $.post
+        });    
+
+        $('#prevpage').click(function ()
+        {
+            $.get( '{{ url("TrazasListadoPorUsuarios", { "page" : trazas.page.prev, "username" : app.request.get('username') } ) }}', { show : {{ trazas.page.num }} }, function(h){
+                        $('#content').html(h);
+                    }, 'html');//FIN $.post
+        });
+</script>        
+{% endblock %}     

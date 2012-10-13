@@ -1,0 +1,35 @@
+{% extends app.request.isXmlHttpRequest == false ? "SquidTrazasBundle::layout.html.twig" : "SquidTrazasBundle::clean.html.twig" %}
+{% block content %}
+{% include "SquidTrazasBundle:Default:_listado.html.twig" %}
+<script>
+        $('#pager_pages').change(function(){ setPorPagina(this); });
+        
+        function setPorPagina ( l)
+        {
+            $.get( '{{ url("TrazasListadoPorIP", { "page" : trazas.page.page, "ip" : app.request.get('ip') } ) }}', { show : $(l).val() }, function(h){
+                        $('#content').html(h);
+                    }, 'html');//FIN $.post
+        }
+                
+        $('#page').change(function ()
+        {
+            $.get( '{{ url("TrazasListadoPorIP", { "ip" : app.request.get('ip') } ) }}/'+$(this).val(), { show : $(l).val() }, function(h){
+                        $('#content').html(h);
+                    }, 'html');//FIN $.post
+        });    
+
+        $('#nextpage').click(function ()
+        {
+            $.get( '{{ url("TrazasListadoPorIP", { "page" : trazas.page.next, "ip" : app.request.get('ip') } ) }}', { show : {{ trazas.page.num }} }, function(h){
+                        $('#content').html(h);
+                    }, 'html');//FIN $.post
+        });    
+
+        $('#prevpage').click(function ()
+        {
+            $.get( '{{ url("TrazasListadoPorIP", { "page" : trazas.page.prev, "ip" : app.request.get('ip') } ) }}', { show : {{ trazas.page.num }} }, function(h){
+                        $('#content').html(h);
+                    }, 'html');//FIN $.post
+        });
+</script>        
+{% endblock %}     

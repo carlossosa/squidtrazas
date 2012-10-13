@@ -1,0 +1,5 @@
+{% if app.request.isXmlHttpRequest %}
+{% for usuario in usuarios %}
+   <li><a href="{{ path("TrazasListadoPorUsuarios", { "username" : usuario.username } ) }}">{{ usuario.username }}</a></li>
+{% endfor %}
+{% endif %}   

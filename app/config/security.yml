@@ -1,0 +1,28 @@
+security:
+    role_hierarchy:
+        ROLE_ADMIN: [ROLE_MONITOR, ROLE_TRAZAS]
+        
+    firewalls:
+        secured_area:
+            pattern:    ^/
+            anonymous: ~
+            http_basic:
+                realm: "Trazas de Navegacion"   
+
+    providers:
+      in_memory:
+            memory:
+                users:
+                    admin: { password: accesso, roles: [ 'ROLE_ADMIN' ] }
+                    lucila: { password: lucila64, roles: [ 'ROLE_MONITOR' ] }
+                    sonina: { password: farfalla, roles: [ 'ROLE_MONITOR' ] }
+                    eddy: { password: acuar10, roles: [ 'ROLE_MONITOR' ] }
+
+
+    encoders:
+        Symfony\Component\Security\Core\User\User: plaintext
+
+    access_control:
+        - { path: ^/(e|_usuarios), roles: ROLE_MONITOR }
+        - { path: ^/(ip|u|t), roles: ROLE_TRAZAS }
+        - { path: ^/*, roles: [ROLE_MONITOR] }

@@ -1,0 +1,62 @@
+{% extends app.request.isXmlHttpRequest == false ? "SquidTrazasBundle:Estadisticas:layout.html.twig" : "SquidTrazasBundle::clean.html.twig" %}
+{% block content %}
+<div id="box">
+    <h3>Dominios</h3>
+    <table>
+        <tbody>
+            <tr>
+                <td>
+                    <a href="{{ url('TopUrls') }}">Dominios más activos</a>
+                </td>   
+           </tr>
+            <tr>
+                <td>
+                    <a style="cursor: pointer" onclick="$(location).attr('href', '{{ url('TopUrls') }}/'+$('#dominios_para').val())">Dominios más activo para el usuario </a><input id="dominios_para" value="">
+                    <script>
+                         $('#dominios_para').autocomplete({
+                                                source: "{{ url("TrazasUsuarios") }}",
+                                                minLength: 3                                                
+                                });
+                        </script>
+                </td> 
+            </tr>
+            <tr>
+                <td>
+                    <a style="cursor: pointer" onclick="$(location).attr('href', '{{ url('TopUrls') }}/'+$('#dominios_para').val())">Dominios más activo para el usuario </a><input id="dominios_para" value="">
+                    <script>
+                         $('#dominios_para').autocomplete({
+                                                source: "{{ url("TrazasUsuarios") }}",
+                                                minLength: 3                                                
+                                });
+                        </script>
+                </td> 
+            </tr>
+        </tbody>
+    </table>
+    <h3>Tráfico de usuarios</h3>
+    <table>
+        <tbody>        
+            <tr>
+                <td>
+                    <a href="{{ url('TraficoUsuarios', { "cuando" : "ultimasemana" }) }}">Actividad esta semana ...</a>
+                </td>                   
+            </tr>
+            <tr>
+                <td>
+                    <a href="{{ url('TraficoUsuarios', { "cuando" : "ultimomes" }) }}">Actividad de los últimos 30 días ...</a>
+                </td>                   
+            </tr>
+            <tr>
+                <td>
+                    <a href="{{ url('TraficoUsuarios', { "cuando" : "ultimoano" }) }}">Actividad de los últimos 365 días ...</a>
+                </td>                   
+            </tr>
+            <tr>
+                <td>
+                    <a href="{{ url('TraficoUsuarios') }}">Completo</a>
+                </td>                   
+            </tr>
+        </tbody>
+    </table>
+    </div>
+{% endblock %}     

@@ -1,0 +1,26 @@
+{% extends app.request.isXmlHttpRequest == false ? "SquidTrazasBundle:Estadisticas:layout.html.twig" : "SquidTrazasBundle::clean.html.twig" %}
+{% block content %}
+      <div id="box">
+    <h3>Dominios más activos</h3>
+    <table width="100%">
+        <thead>
+            <tr>
+                <th>Dominio</th>
+                <th>Cantidad de Peticiones</th>                              
+                <th>Ancho de banda</th>
+                <th>Tiempo total</th>
+            </tr>
+        </thead>
+        <tbody>          
+            {% for dominio in dominios %}
+                <tr>
+                    <td>{{ dominio.dominio }}</td>
+                    <td>{{ dominio.accesos }}</td>
+                    <td>{{ dominio.bw | humanreadable }}</td>
+                    <td>{{ dominio.tiempo | humantime }}</a></td>                    
+                </tr>                
+             {% endfor %}
+        </tbody>
+</table>    
+    </div>
+{% endblock %}     

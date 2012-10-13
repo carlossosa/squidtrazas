@@ -1,0 +1,128 @@
+{% extends "::base.html.twig" %}
+{% block title %}Analisis de Trazas de Navegación - BNC Jos&eacute; Mart&iacute;{% endblock %}
+{% block stylesheets %}
+    <link rel="stylesheet" type="text/css" href="{{ asset('bundles/squidtrazas/css/theme.css') }}" />
+    <link rel="stylesheet" type="text/css" href="{{ asset('bundles/squidtrazas/css/style.css') }}" />
+    <link rel="stylesheet" type="text/css" href="{{ asset('bundles/squidtrazas/css/jquery-ui/jquery-ui.css') }}" />    
+    <script src="{{ asset("bundles/squidtrazas/js/jquery-min-1.7.js") }}" type="text/javascript"></script>
+    <script src="{{ asset("bundles/squidtrazas/js/jquery-ui-min.js") }}" type="text/javascript"></script>
+    <script src="{{ asset("bundles/squidtrazas/js/jquery-ui-timepicker-addon.js") }}" type="text/javascript"></script>
+    <!--[if IE]>
+    <link rel="stylesheet" type="text/css" href="css/ie-sucks.css" />
+    <![endif]-->
+{% endblock %}
+{% block body %}
+<div id="container">
+    	<div id="header">
+            <h2>Analisis de Trazas de Navegación - BNC Jos&eacute; Mart&iacute;</h2>
+    <div id="topmenu">
+            	<ul>
+                	{% block menu %}
+                        <li class="current"><a href="{{ path('TrazasListado') }}">Trazas</a></li>
+                        <li><a href="{{ url('Estadisticas') }}">Estadisticas</a></li>
+                        {% endblock %}                                               
+              </ul>
+          </div>
+      </div>
+        <div id="top-panel">
+            <div id="panel">
+                <ul>
+                    {% block submenu %}<li class="current"><a href="{{ path("TrazasListado") }}"><img src="{{ asset('bundles/squidtrazas/img/icons/report.png') }}"> Listado</a></li>{% endblock %}
+                </ul>
+            </div>
+      </div>
+        <div id="wrapper">
+            <div id="content">
+       		{% block content %}{% endblock %}	
+            </div>
+            <div id="sidebar">
+  				<ul>
+                	{% block sidebar %}                        
+                        <li><h3><a href="#" class="online">Tiempo</a></h3>                            
+                                    Desde: <input id="time_start" name="date_start" type="text" value="{% if app.session.get('time_start') is defined %}{{ app.session.get('time_start') }}{% endif %}"/>                                    
+                                    <br/>
+                                    Hasta: <input id="time_end" name="date_end" type="texet" value="{% if app.session.get('time_end') is defined %}{{ app.session.get('time_end') }}{% endif %}"/>                                    
+                                    <br/>
+                                    <input type="checkbox" id="time_enabled" {% if app.session.get('time_enabled') %}checked="checked"{% endif %}/><label for="time_enabled">Filtrar por tiempo ...</label>
+                                    <br/>
+                                    <center>
+                                    <input id="time_enable" type="button" value="Aplicar" />
+                                    </center>
+                                    <br/>
+                                    <script>
+                                        $('#time_end, #time_start').datetimepicker({ dateFormat: "yy-mm-dd", 
+                                                                                     timeFormat: "hh:mm:ss", 
+                                                                                     showSecond: true, 
+                                                                                     monthNames: [  "Enero", 
+                                                                                                    "Frebrero", 
+                                                                                                    "Marzo", 
+                                                                                                    "Abril", 
+                                                                                                    "Mayo", 
+                                                                                                    "Junio", 
+                                                                                                    "Julio", 
+                                                                                                    "Agosto", 
+                                                                                                    "Septiembre", 
+                                                                                                    "Octubre", 
+                                                                                                    "Noviembre", 
+                                                                                                    "Diciembre"],
+                                                                                    dayNamesMin: [ "Do", "Lu", "Ma", "Mi", "Ju", "Vi", "Sa"],
+                                                                                            });
+                                         $('#time_enable').click(function ()
+                                                            {
+                                                                if ( $('#time_enabled').attr('checked') )  { var en = 1; }
+                                                                else { var en = 0; }
+                                                                
+                                                                $.get( '{{ app.request.getRequestUri }}', { time : en, time_start: $('#time_start').val(), time_end: $('#time_end').val() }, function(h){
+                                                                            $('#content').html(h);
+                                                                        }, 'html');//FIN $.post
+                                                            }); 
+                                    </script>
+                        </li>   
+                        {% if is_granted('ROLE_TRAZAS') %}                
+                        <li><h3><a href="#" class="online">IP</a></h3>                            
+                            <ul>        
+                                <li><input id="ip_search" type="text" id="ip_tag" size="12" value="" /> <a class="search" href="#" onclick="ipsearch()">Buscar</a></li>                                
+                                <br>                                
+                             </ul>
+                        </li>                
+                        
+                        <li><h3><a href="#" class="user">Usuario</a></h3>                            
+                            <ul>        
+                                <li><a class="search"><input type="text" id="search_tag" size="12" value="" /></a></li>
+                                <li id="mostrar_listado_usuarios"><a onclick="MostrarListaUsuarios()" style="cursor: pointer">Mostrar [+]</a></li>
+                             </ul>
+                                <script>
+                                    function MostrarListaUsuarios ( ) 
+                                    {
+                                        $.get( '{{ url("TrazasUsuarios") }}', {}, function(h){
+                                                        $('#mostrar_listado_usuarios').parent().append(h);
+                                                        $('#mostrar_listado_usuarios').remove();
+                                                    }, 'html');
+                                    }
+                                    </script>
+                        </li>
+                        <script type="text/javascript">
+                        $('#search_tag').autocomplete({
+                                                source: "{{ url("TrazasUsuarios") }}",
+                                                minLength: 3,
+                                                change: function () { $(location).attr('href', '{{ app.request.getScriptName }}/u/'+$(this).val()); }                                                
+                                });
+                        
+                        function ipsearch()
+                                    {
+                                        var param = $('#ip_search').val();
+                                        $(location).attr("href","{{ url('TrazasListadoPorIP') }}/"+param);
+                                    }
+                        </script>
+                        {% endif %}   
+                        {% endblock %}
+				</ul>       
+          </div>
+      </div>
+        <div id="footer">
+        <div id="credits">
+            Creado por <a href="mailto:carlitin@gmail.com">Carlos Sosa</a> para Biblioteca Nacional de Cuba Jos&eacute; Mart&iacute;
+        </div>        
+        </div>
+</div>
+{% endblock %}

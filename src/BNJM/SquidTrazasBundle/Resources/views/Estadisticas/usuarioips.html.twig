@@ -1,0 +1,22 @@
+{% extends app.request.isXmlHttpRequest == false ? "SquidTrazasBundle:Estadisticas:layout.html.twig" : "SquidTrazasBundle::clean.html.twig" %}
+{% block content %}
+      <div id="box">
+    <h3>IP de las conexiones originadas por el usuario ....</h3>
+    <table width="100%">
+        <thead>
+            <tr>
+                <th>IP</th>     
+                <th>Ultimo acceso</th>
+            </tr>
+        </thead>
+        <tbody>          
+            {% for ip in ips %}
+                <tr>
+                    <td>{{ ip.ip }}</td>                    
+                    <td>{{ ip.time | date() }}</td>
+                </tr>                
+             {% endfor %}
+        </tbody>
+</table>    
+    </div>
+{% endblock %}     

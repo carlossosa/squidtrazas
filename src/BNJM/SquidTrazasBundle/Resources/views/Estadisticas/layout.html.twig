@@ -1,0 +1,8 @@
+{% extends app.request.isXmlHttpRequest == false ? "SquidTrazasBundle::layout.html.twig" : "SquidTrazasBundle::clean.html.twig" %}
+{% block menu %}
+<li><a href="{{ path('TrazasListado') }}">Trazas</a></li>
+<li class="current"><a href="{{ path('Estadisticas') }}">Estadisticas</a></li>
+{% endblock %}
+{% block submenu %}
+
+{% endblock %}

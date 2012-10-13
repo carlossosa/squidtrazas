@@ -1,0 +1,35 @@
+{% extends app.request.isXmlHttpRequest == false ? "SquidTrazasBundle::layout.html.twig" : "SquidTrazasBundle::clean.html.twig" %}
+{% block content %}
+        {% include "SquidTrazasBundle:Default:_listado.html.twig" %}
+<script>
+        $('#pager_pages').change(function(){ setPorPagina(this); });
+        
+        function setPorPagina ( l)
+        {
+            $.get( '{{ url("TrazasListado", { "page" : trazas.page.page } ) }}', { show : $(l).val() }, function(h){
+                        $('#content').html(h);
+                    }, 'html');//FIN $.post
+        }
+                
+        $('#page').change(function ()
+        {
+            $.get( '{{ url("TrazasListado") }}'+$(this).val(), { }, function(h){
+                        $('#content').html(h);
+                    }, 'html');//FIN $.post
+        });    
+
+        $('#nextpage').click(function ()
+        {
+            $.get( '{{ url("TrazasListado", { "page" : trazas.page.next } ) }}', { }, function(h){
+                        $('#content').html(h);
+                    }, 'html');//FIN $.post
+        });    
+
+        $('#prevpage').click(function ()
+        {
+            $.get( '{{ url("TrazasListado", { "page" : trazas.page.prev } ) }}', { }, function(h){
+                        $('#content').html(h);
+                    }, 'html');//FIN $.post
+        });
+</script>        
+{% endblock %}     
