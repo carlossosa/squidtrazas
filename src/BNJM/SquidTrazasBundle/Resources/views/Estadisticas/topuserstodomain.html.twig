@@ -1,0 +1,22 @@
+{% extends app.request.isXmlHttpRequest == false ? "SquidTrazasBundle:Estadisticas:layout.html.twig" : "SquidTrazasBundle::clean.html.twig" %}
+{% block content %}
+      <div id="box">
+    <h3>Usuarios más activos para</h3>
+    <table width="100%">
+        <thead>
+            <tr>
+                <th>Usuario</th>
+                <th>Cantidad de Peticiones</th>                              
+            </tr>
+        </thead>
+        <tbody>          
+            {% for usuario in usuarios %}
+                <tr>
+                    <td>{{ usuario.Usuario }}</td>
+                    <td>{{ usuario.Accesos }}</td>
+                </tr>                
+             {% endfor %}
+        </tbody>
+</table>    
+    </div>
+{% endblock %}     

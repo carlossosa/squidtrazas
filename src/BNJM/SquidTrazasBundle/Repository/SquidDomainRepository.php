@@ -32,4 +32,17 @@ class SquidDomainRepository extends EntityRepository {
         
         return $return;
     }        
+    
+    public function searchDomain($user)
+    {
+        return $this->getEntityManager()
+                        ->createQueryBuilder()
+                        ->from( $this->_entityName, 't')
+                        ->select("t.domain")
+                        ->where("t.domain LIKE :user")
+                        ->setParameter("user", "%".$user."%")
+                        ->getQuery()
+                        ->setMaxResults(6)
+                        ->getArrayResult();
+    }
 }

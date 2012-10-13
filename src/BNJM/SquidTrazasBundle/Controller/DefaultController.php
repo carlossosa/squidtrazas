@@ -34,6 +34,21 @@ class DefaultController extends DefaultControllerTemplate
     }
     
     /**
+     * @Route("/_dominios", name="TrazasDominios") 
+     */
+    public function ajaxlistadominiosAction ()
+    {
+            $users = $this->getDoctrine()
+                            ->getEntityManager()
+                            ->getRepository('SquidTrazasBundle:SquidDomain')
+                            ->searchDomain( $this->getRequest()->get('term'));
+            $_users = array();
+            foreach ( $users as $t) $_users[] = $t['domain'];        
+            
+            return new Response( json_encode( $_users ) );
+    }
+    
+    /**
      * @Route("/u/{username}/{page}", name="TrazasListadoPorUsuarios", defaults={"page"="1"})
      * @Template()
      */

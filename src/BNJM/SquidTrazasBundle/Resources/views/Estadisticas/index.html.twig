@@ -22,10 +22,10 @@
             </tr>
             <tr>
                 <td>
-                    <a style="cursor: pointer" onclick="$(location).attr('href', '{{ url('TopUrls') }}/'+$('#dominios_para').val())">Dominios más activo para el usuario </a><input id="dominios_para" value="">
+                    <a style="cursor: pointer" onclick="$(location).attr('href', '{{ url('TopUsersToDomain') }}/'+$('#usuarios_para').val())">Usuarios más activo para el dominio </a><input id="usuarios_para" value="">
                     <script>
-                         $('#dominios_para').autocomplete({
-                                                source: "{{ url("TrazasUsuarios") }}",
+                         $('#usuarios_para').autocomplete({
+                                                source: "{{ url("TrazasDominios") }}",
                                                 minLength: 3                                                
                                 });
                         </script>

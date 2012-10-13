@@ -23,7 +23,17 @@ class EstadisticasController extends DefaultControllerTemplate {
      * @Template()
      */
     public function usuariosactivosAction($cuando,$cuandofin) {  
-        $r = $this->getRequest();
+        
+        $r = $this->periodManager($this->getRequest(), $cuando, $cuandofin);
+        
+        return ( $this->getDoctrine()
+                        ->getRepository("SquidTrazasBundle:SquidTraza")
+                        ->topUser( $r[0], $r[1])
+                );
+    }
+    
+    public function periodManager ( $r, $cuando, $cuandofin)
+    {        
         $this->setPeriod($r);
         
         switch ($cuando) {
@@ -60,10 +70,7 @@ class EstadisticasController extends DefaultControllerTemplate {
             $cuandofin = $r->getSession()->get('time_end', null);
         }
         
-        return ( $this->getDoctrine()
-                        ->getRepository("SquidTrazasBundle:SquidTraza")
-                        ->topUser($cuando,$cuandofin)
-                );
+        return array($cuando,$cuandofin);
     }
     
     /**
@@ -88,6 +95,20 @@ class EstadisticasController extends DefaultControllerTemplate {
         return ( array('dominios' =>  $this->getDoctrine()
                                             ->getRepository("SquidTrazasBundle:SquidTraza")
                                             ->topDomainEver())
+                );
+    }    
+    
+    /**
+     * @Route("/e/top/usersdomain/{domain}/{cuando}/{cuandofin}", defaults={"domain"="","cuando"="","cuandofin"=""}, name="TopUsersToDomain") 
+     * @Template()
+     */
+    public function topuserstodomainAction($domain,$cuando,$cuandofin)
+    {        
+        $r = $this->periodManager($this->getRequest(), $cuando, $cuandofin);
+        
+        return ( array('usuarios' =>  $this->getDoctrine()
+                                            ->getRepository("SquidTrazasBundle:SquidTraza")
+                                            ->topUsersToDomain( $domain, $r[0], $r[1]))
                 );
     }    
     

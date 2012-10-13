@@ -321,4 +321,42 @@ class SquidTrazaRepository extends EntityRepository {
                         ->setMaxResults(1)
                         ->getResult();
     }
+    
+    public function topUsersToDomain( $domain, $p_s = null, $p_e = null) {
+        /**
+         * SELECT u.username, count(*) AS Accessos 
+         * FROM squid_traza t, squid_domains d, squid_usuarios u 
+         * WHERE t.domain_id = d.id 
+         *      AND d.domain = 'mail.google.com' 
+         *      AND u.id = t.usuario_id 
+         * GROUP BY t.usuario_id 
+         * ORDER BY Accessos DESC;
+         */
+        
+        $q = $this->createQueryBuilder('t')
+                        ->select('t, d, u')
+                        ->join('t.usuario', 'u')
+                        ->join('t.domain', 'd')
+                        ->select('u.username Usuario')
+                        ->addSelect('COUNT(t) Accesos')
+                        ->groupBy('u')
+                        ->orderBy('Accesos', 'DESC')
+                        ->where('d.domain LIKE :domain')
+                        ->setParameter('domain', $domain);
+        
+        if ( $p_s)
+        {
+            $q->andWhere('t.time > :ps')
+                    ->andWhere('t.time < :pe')
+                    ->setParameter('pe', $p_e)
+                    ->setParameter('ps', $p_s);
+        }
+        
+        return    $q->getQuery()
+                    ->setResultCacheDriver(new \Doctrine\Common\Cache\ArrayCache())
+                    ->setResultCacheLifetime(3600)
+                    ->useResultCache(true)
+                    ->getArrayResult();
+        
+    }
 }
