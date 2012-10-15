@@ -319,16 +319,6 @@ class SquidTrazaRepository extends EntityRepository {
     }
     
     public function topUsersToDomain( $domain, $p_s = null, $p_e = null) {
-        /**
-         * SELECT u.username, count(*) AS Accessos 
-         * FROM squid_traza t, squid_domains d, squid_usuarios u 
-         * WHERE t.domain_id = d.id 
-         *      AND d.domain = 'mail.google.com' 
-         *      AND u.id = t.usuario_id 
-         * GROUP BY t.usuario_id 
-         * ORDER BY Accessos DESC;
-         */
-        
         $q = $this->createQueryBuilder('t')
                         ->select('t, d, u')
                         ->join('t.usuario', 'u')
