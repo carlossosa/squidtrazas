@@ -1,0 +1,60 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+      <title>Economia BNJM - Conversi&oacute;n de N&oacute;mina a DBF</title>
+      <link type="text/css" rel="stylesheet" href="style.css"></link>
+      <script type="text/javascript" src="jquery.min.js"></script>
+  </head>
+  <body>
+      <div class="password">          
+          <img src="http://mail.bnjm.cu/skins/larry/images/roundcube_logo.png" />         
+          <h2>Tecle nombre de usuario para conocer <br>el consumo de cuota para la navegaci&oacute;n.</h2>
+          <br class="all">
+          <input id="user" type="text" />
+          <input id="ir" type="button" value="Ir" size="25" />
+          <script>
+              $(document).ready(function() {
+                  $("#ir").click(function(){
+                      $(location).attr('href','http://squidtrazas.bnjm.cu/v/'+$("#ir").val());
+                  });
+              });
+          </script>
+      </div>
+  </body>
+    <style>
+.password {    
+    left: 0px;
+    top: 0px;
+    text-align: center;
+    padding-top: 20%;
+}
+.password input[type=text] {
+    border: 1px solid #ccc;
+    box-shadow: #ccc 0 0 5px 5px;
+    border-radius: 10px;
+    padding: 5px;
+    font-size: xx-large;
+}
+.password input[type=button] {    
+    font-size: xx-large;
+}
+
+.input_ul {
+    visibility: hidden;
+}
+
+.labels {
+    color: #000;
+    font-weight: 800;
+    font-family: Gill, Helvetica, sans-serif;
+    font-size: 25px;
+    border: 1px solid #fff;
+    padding: 3px;
+    background-color: #ccc;
+    border-radius: 7px;
+    cursor: pointer;
+}
+BODY {
+    background: #375b91;
+}
+    </style>

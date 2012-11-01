@@ -1,0 +1,22 @@
+{% extends app.request.isXmlHttpRequest == false ? "SquidTrazasBundle::layout.html.twig" : "SquidTrazasBundle::clean.html.twig" %}
+{% block content %}
+      <div id="box">
+    <h3>Consumo</h3>
+    <table width="100%">
+        <thead>
+            <tr>
+                <th>Usuario</th>
+                <th>Horas Consumidas</th>                              
+                <th>Ancho de banda Consumido</th>
+            </tr>
+        </thead>
+        <tbody>          
+                <tr>                    
+                    <td>{{ usuario }}</td>
+                    <td>{{ consumo.horas | humanizethetime }}/{{ quota.horas | humanizethetime }} </td>
+                    <td>{{ consumo.bytes | humanreadable }}/{{ quota.bytes | humanreadable }}</td>                    
+                </tr>                
+        </tbody>
+</table>               
+    </div>
+{% endblock %}     

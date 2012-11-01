@@ -1,0 +1,61 @@
+<style>
+.consumo {
+    z-index: 2;
+    width: 500px; 
+    border: 1px solid #a33;
+    padding: 5px;                
+    height: 18px;
+    background: #a33;
+    -moz-border-radius: 15px;
+    -webkit-border-radius: 15px;
+    border-radius: 15px;
+    }
+ .relleno_horas {
+     z-index: 3;
+    width: {{ (quota.horaspercent*500)/100 }}px;
+    height: 18px;
+    position: fixed;
+    background: #d0dbb3;    
+    -moz-border-radius: 15px;
+    -webkit-border-radius: 15px;
+    border-radius: 15px;
+     }
+ .relleno_megas {
+     z-index: 3;
+    width: {{ (quota.megaspercent*500)/100 }}px;
+    height: 18px;
+    position: fixed;
+    background: #d0dbb3;  
+    -moz-border-radius: 15px;
+    -webkit-border-radius: 15px;
+    border-radius: 15px;
+     }
+.box {
+    padding: 10px;    
+    }
+.label {
+    border: 1px solid white;
+    width: 350px;
+    padding-left: 5px;
+    background: #EFEFEF;
+    -moz-border-radius: 0 15px 0 10px;
+    -webkit-border-radius:  0 15px 0 10px;
+    border-radius: 0 15px 0 10px;
+    }
+BODY {
+    background: #375b91;
+    }
+</style>
+
+<div class="box">    
+    <h1 style="font-style: italic "><img src="http://mail.bnjm.cu/skins/larry/images/roundcube_logo.png" style="vertical-align: middle"></h1>   
+<h2>
+<div class="label"><strong>Usuario:</strong> {{ usuario }}</div>    
+</h2>
+    
+    <div class="label" ><strong>Cuota de Horas:</strong> {{ consumo.horas | humanizethetime }}/{{ quota.horas | humanizethetime }} </div>
+    <div class="consumo"><div class="relleno_horas"></div></div>
+    <br>
+    <div class="label"><strong>Cuota de Megas:</strong> {{ consumo.bytes | humanreadable }}/{{ quota.bytes | humanreadable }}</div>
+    <div class="consumo"><div class="relleno_megas"></div></div>                                
+</div>

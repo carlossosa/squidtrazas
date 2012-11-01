@@ -27,9 +27,9 @@ class SquidTrazaRepository extends EntityRepository {
                         ->resetDQLPart('orderBy')
                         ->getQuery()
                         ->setResultCacheDriver(new \Doctrine\Common\Cache\ApcCache())
-                        ->setQueryCacheLifetime(600)          
-                        ->setResultCacheLifetime(600)
-                        ->useResultCache(true,600,'sumSize')
+                        ->setQueryCacheLifetime(1200)          
+                        ->setResultCacheLifetime(1200)
+                        ->useResultCache(true,1200,'sumSize')
                         ->getSingleResult();
     }
     
@@ -38,7 +38,7 @@ class SquidTrazaRepository extends EntityRepository {
         $page_start_records = ( $page > 0 ) ? intval(($page-1)*$num_per_page) : 0;
         
         //total size
-        $_size = $this->sumSizeRecords(clone $query);
+        $_size = 0;// $this->sumSizeRecords(clone $query);
         $size = $_size['totalsize'];
         
         $r = $this->getResults( $page_start_records, $num_per_page, $query);
@@ -91,7 +91,7 @@ class SquidTrazaRepository extends EntityRepository {
        return $this->getResultOfPage($page, $num_per_page, $query);                                        
     }
     
-    public function getTrazaUsuario ( $page, $num_per_page, $username, $ip, $time_start, $time_end) {
+    public function getTrazaUsuario ( $page, $num_per_page, $username, $ip, $time_start, $time_end) {                
         $query = $this->getEntityManager()
                         ->createQueryBuilder()
                         ->from($this->_entityName, 't')
@@ -115,8 +115,8 @@ class SquidTrazaRepository extends EntityRepository {
        {
            $query->andWhere('t.time <= :timeend')
                    ->setParameter('timeend', $time_end);
-       }
-        
+       }              
+             
        return $this->getResultOfPage($page, $num_per_page, $query);        
     }
     
@@ -140,8 +140,8 @@ class SquidTrazaRepository extends EntityRepository {
        {
            $query->andWhere('t.time <= :timeend')
                    ->setParameter('timeend', $time_end);
-       }
-        
+       }              
+       
        return $this->getResultOfPage($page, $num_per_page, $query);        
     }
     

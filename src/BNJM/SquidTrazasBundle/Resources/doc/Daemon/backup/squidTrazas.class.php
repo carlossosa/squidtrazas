@@ -120,11 +120,7 @@ class squidTrazas {
         } 
         return 0;        
     }
-    
-    public function quotaRecheck ($filetowrite)
-    {
-        file_put_contents($filetowrite, implode('\r\n', $this->db->quotaCheck()));
-    }
 
     public function allOk() { return true; }
 }
+?>

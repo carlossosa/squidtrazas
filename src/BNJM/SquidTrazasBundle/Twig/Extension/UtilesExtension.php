@@ -14,6 +14,7 @@ class UtilesExtension extends \Twig_Extension
                         'humanreadable' => new \Twig_Filter_Method( $this, 'humanreadable'),
                         'httpcode' => new \Twig_Filter_Method( $this, 'httpcode'),
                         'humantime' => new \Twig_Filter_Method( $this, 'humantime'),
+                        'humanizethetime' => new \Twig_Filter_Method( $this, 'humanizethetime'),
                         );
     }
     
@@ -51,5 +52,22 @@ class UtilesExtension extends \Twig_Extension
     public function humantime( $miliseconds)
     {                
         return round($miliseconds/1000,2)."s";
+    }
+    
+    public function humanizethetime ( $miliseconds)
+    {
+        $string = ''; $horas = $minutos = 0; $seconds = intval($miliseconds/1000);
+        $miliseconds = $miliseconds % 1000;
+        if ( $seconds > 3599)
+        {
+            $horas = intval($seconds / 3600);
+            $seconds = $seconds % 3600;
+        }
+        if ( $seconds > 59)
+        {
+            $minutos = intval($seconds / 60);
+            $seconds = $seconds % 60;
+        }    
+        return "{$horas}H {$minutos}M {$seconds}.{$miliseconds}S";
     }
 }

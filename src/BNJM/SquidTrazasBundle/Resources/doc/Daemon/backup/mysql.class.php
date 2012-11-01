@@ -3,12 +3,8 @@ class dbWork
 {
     private $db;
     private $user_list;
-    private $user_quota;
     private $ip_list;
     private $last_domains;
-    private $quota_horas;
-    private $quota_megas;
-    private $banuser;
 
     public function __construct( $user = 'root', $password = '', $database = 'squidtrazas', $host = 'localhost') 
     {
@@ -21,9 +17,6 @@ class dbWork
             $this->fillLastDomains();
             $this->updateIPAlias();
             $this->updateUserList();
-            //$this->updateQuotas();
-            $this->banuser = array();
-            $this->quotaCheck();
         }    
     }
     
@@ -114,10 +107,9 @@ class dbWork
     }
     
     public function insertUser ( $user){
-        if ( $this->db->query('INSERT INTO `squid_usuarios` ( `id`, `username`, `quota_id` ) VALUES (NULL , \''.  $user .'\', 2);') )
+        if ( $this->db->query('INSERT INTO `squid_usuarios` ( `id`, `username` ) VALUES (NULL , \''.  $user .'\');') )
         {
             $this->user_list[$user] = $this->db->insert_id;
-            $this->user_quota[$user] = 2;
             return $this->db->insert_id;
         } else if ( !$this->error() )
         {
@@ -138,7 +130,7 @@ class dbWork
     
     public function updateUserList ()
     {        
-        $_q = $this->db->query("SELECT `squid_usuarios`.`id` AS id, `squid_usuarios`.`username` AS username, `squid_usuarios`.`quota_id` AS quota FROM `squid_usuarios`");
+        $_q = $this->db->query("SELECT `squid_usuarios`.`id` AS id, `squid_usuarios`.`username` AS username FROM `squid_usuarios`");
         if ( !$this->error() )
         {            
             if ( $_q->num_rows > 0)
@@ -147,7 +139,6 @@ class dbWork
                 while ( $row = $_q->fetch_object() )
                 {
                     $this->user_list[$row->username] = $row->id;
-                    $this->user_quota[$row->username] = $row->quota;
                 }
             }    
         } else {
@@ -194,7 +185,7 @@ class dbWork
     
     public function fetchUserFromSql ( $user)
     {
-        $_q = $this->db->query("SELECT `id`, `username`, `quota_id` AS quota FROM `squid_usuarios` WHERE `username` = '".$user."' LIMIT 1");
+        $_q = $this->db->query("SELECT `id`, `username` FROM `squid_usuarios` WHERE `username` = '".$user."' LIMIT 1");
         if ( !$this->error() )
         {            
             if ( $_q->num_rows == 1)
@@ -202,7 +193,6 @@ class dbWork
                 $row = $_q->fetch_object();
                 $_q->close();
                 $this->user_list[$row->username] = $row->id; 
-                $this->user_quota[$row->username] = $row->quota; 
                 return $row->id;
             } else {
                 return $this->insertUser($user);
@@ -343,67 +333,5 @@ class dbWork
         {
             throw new \Exception('Error! ocurrio un error al intentar consultar el MySQL {'.$this->error().'}');
         }
-    }
-    
-    public function updateQuotas ( )
-    {
-        $q = $this->db->query("SELECT * FROM `quotas_user`");        
-        if ( !$this->error())
-        {
-            if ( $q->num_rows > 0)
-            {
-                $this->quota_horas = array();
-                $this->quota_megas = array();
-                while ( $row = $q->fetch_object() )
-                {
-                    $this->quota_horas[$row->id] = $row->quotaMegas;
-                    $this->quota_megas[$row->id] = $row->quotaMegas;
-                }
-            }
-        } else {
-            throw new \Exception('Error! ocurrio un error al intentar consultar el MySQL {'.$this->error().'}');
-        }
-    }
-    
-    public function quotaCheck ()
-    {
-        $_q = "SELECT h.name AS nombre FROM". 
-                    " (SELECT u.username AS name, ".
-                             "c.usuario_id AS user, ".
-                             "(q.quotaHoras*1000) AS q_Horas, ".
-                             "q.quotaMegas AS q_Megas, ".
-                             "sum(c.horas) AS horas, ".
-                             "sum(c.bytes) AS bytes, ".
-                             "c.time ".
-                    "FROM quotas_consumo c ".
-                        "LEFT JOIN squid_usuarios u ".
-                                "ON c.usuario_id=u.id ".
-                        "LEFT JOIN quotas_user q ".
-                                "ON u.quota_id=q.id ".
-                    "WHERE c.time >= '".date("Y-m")."-1' ".
-                            "AND c.time <= '".date("Y-m-d")."-1'".
-                    "GROUP BY user) h ".
-                "WHERE (h.q_Horas < h.horas ".
-                        "AND h.q_Horas != 0) ".
-                    "OR (h.q_Megas < h.bytes ".
-                        "AND h.q_Megas != 0)";
-        $q = $this->db->query($_q);
-        if ( !$this->error() )
-        {            
-            if ( $q->num_rows > 0)
-            {
-                $r = array();
-                while ( $row = $q->fetch_object() )
-                {
-                    $r[] = $row->nombre;
-                }
-                return $r;
-             }    else {
-                 return array();
-             }
-            
-        } else {
-                throw new \Exception('Error! ocurrio un error al intentar consultar el MySQL {'.$this->error().'}');
-        }        
     }
 }

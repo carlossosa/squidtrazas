@@ -21,6 +21,12 @@ class SquidUsuario {
      * @ORM\Column(type="string", length=100)
      */
     private $username;    
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="QuotaUsuario", cascade={"all"}, fetch="EAGER")
+     * @ORM\JoinColumn(name="quota_id", referencedColumnName="id")
+     */
+    private $quota;
 
     /**
      * Get id
@@ -55,5 +61,28 @@ class SquidUsuario {
     public function __toString()
     {
         return $this->getUsername();
+    }
+
+    /**
+     * Set quota
+     *
+     * @param BNJM\SquidTrazasBundle\Entity\QuotaUsuario $quota
+     * @return SquidUsuario
+     */
+    public function setQuota(\BNJM\SquidTrazasBundle\Entity\QuotaUsuario $quota = null)
+    {
+        $this->quota = $quota;
+    
+        return $this;
+    }
+
+    /**
+     * Get quota
+     *
+     * @return BNJM\SquidTrazasBundle\Entity\QuotaUsuario 
+     */
+    public function getQuota()
+    {
+        return $this->quota;
     }
 }

@@ -99,7 +99,6 @@ $runningOkay = true;
 //VARS
 $trazas = null;
 $file = "/var/log/squid3/access.log";
-$file_ban = "/etc/squid3/quotaban";
 $datos = "/tmp/squidTrazas.db";
 $mysql = array ( 'user' => 'squidtrazas',
                  'pass' => 'squidtrazas',
@@ -117,8 +116,6 @@ while (!System_Daemon::isDying() && $runningOkay ) {
     {
         try {
             $n = $trazas->importLines();
-            //check quota consumo
-            $trazas->quotaRecheck($file_ban);
         } catch (Exception $exc) {
             System_Daemon::err("{{appName Error: %s}}", $exc->getMessage());
             $trazas = null;
